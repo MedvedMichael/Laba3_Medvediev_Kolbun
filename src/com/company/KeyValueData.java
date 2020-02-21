@@ -1,5 +1,6 @@
 package com.company;
 
+// KeyValueData - data like "key - value"
 public class KeyValueData <K, V> {
     K mKey;
     V mValue;

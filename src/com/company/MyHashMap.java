@@ -1,7 +1,6 @@
 package com.company;
 
 
-import java.util.HashMap;
 
 public class MyHashMap<K, V> {
     KeyValueData<K, V>[] table;
@@ -42,7 +41,7 @@ public class MyHashMap<K, V> {
 //        }
 
         V checked = checkAllKeyValueData(hash, key, value, index);
-        if (checked == null)
+        if (checked != null)
             return;
 
 
@@ -62,7 +61,7 @@ public class MyHashMap<K, V> {
         return null;
     }
 
-    void putWithNullKey(V value) {
+    private void putWithNullKey(V value) {
         V checked = checkAllKeyValueData(0, null, value, 0);
         if (checked == null)
             return;
@@ -73,6 +72,27 @@ public class MyHashMap<K, V> {
     void addKeyValueData(int hash, K key, V value, int index) {
         KeyValueData<K, V> data = table[index];
         table[index] = new KeyValueData<>(hash, key, value, data);
+
+    }
+
+    V get(K key) {
+        int hash = hash(key.hashCode());
+
+        int index = getIndexFor(hash, capacity);
+
+        KeyValueData<K, V> data = table[index];
+
+        while (data != null) {
+            if (key.equals(data.mKey))
+                return data.mValue;
+            data = data.next;
+        }
+
+        return null;
     }
 
 }
+
+
+
+

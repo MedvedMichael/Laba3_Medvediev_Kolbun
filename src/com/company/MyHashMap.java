@@ -1,8 +1,6 @@
 package com.company;
 
 
-
-
 public class MyHashMap<K, V> {
     KeyValueData<K, V>[] table; // KeyValueData - data like "key - value"
     int capacity = 16;
@@ -19,12 +17,12 @@ public class MyHashMap<K, V> {
         return h ^ (h >>> 7) ^ (h >>> 4);
     }
 
-//    get index to put from hash and current length
+    //    get index to put from hash and current length
     static int getIndexFor(int hash, int length) {
         return hash & (length - 1);
     }
 
-//    push "key - value" into the table
+    //    push "key - value" into the table
     void put(K key, V value) {
         if (key == null) {
             putWithNullKey(value);
@@ -52,7 +50,7 @@ public class MyHashMap<K, V> {
         addKeyValueData(hash, key, value, index);
     }
 
-//    check all "key - value" data if they have the same key
+    //    check all "key - value" data if they have the same key
     V checkAllKeyValueData(int hash, K key, V value, int index) {
         KeyValueData<K, V> data = table[index];
         while (data != null) {
@@ -66,7 +64,7 @@ public class MyHashMap<K, V> {
         return null;
     }
 
-// push "key - value" data if key == null
+    // push "key - value" data if key == null
     private void putWithNullKey(V value) {
         V checked = checkAllKeyValueData(0, null, value, 0);
         if (checked == null)
@@ -75,13 +73,14 @@ public class MyHashMap<K, V> {
         addKeyValueData(0, null, value, 0);
     }
 
-//  create KeyValueData element and put it with right index
+    //  create KeyValueData element and put it with right index
     void addKeyValueData(int hash, K key, V value, int index) {
         KeyValueData<K, V> data = table[index];
         table[index] = new KeyValueData<>(hash, key, value, data);
 
     }
-// returns the value for given key
+
+    // returns the value for given key
     V get(K key) {
         int hash = hash(key.hashCode());
 
@@ -98,7 +97,22 @@ public class MyHashMap<K, V> {
         return null;
     }
 
+
+    class KeyValueData<K, V> {
+        K mKey;
+        V mValue;
+        int mHash;
+        KeyValueData<K, V> next;
+
+        KeyValueData(int hash, K key, V value, KeyValueData<K, V> next) {
+            mHash = hash;
+            mKey = key;
+            mValue = value;
+            this.next = next;
+        }
+    }
 }
+
 
 
 

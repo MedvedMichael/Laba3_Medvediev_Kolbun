@@ -32,19 +32,42 @@ public class MyHashMap<K, V> {
 
         int index = getIndexFor(hash, capacity);
 
-        KeyValueData<K, V> data = table[index];
-        if (data.mHash == hash && key.equals(data.mKey)) {
-            data.mValue = value;
+//        KeyValueData<K, V> data = table[index];
+//        while(data != null) {
+//            if (data.mHash == hash && key.equals(data.mKey)) {
+//                data.mValue = value;
+//                return;
+//            }
+//            data = data.next;
+//        }
+
+        V checked = checkAllKeyValueData(hash, key, value, index);
+        if (checked == null)
             return;
-        }
+
 
         addKeyValueData(hash, key, value, index);
+    }
 
-
+    V checkAllKeyValueData(int hash, K key, V value, int index) {
+        KeyValueData<K, V> data = table[index];
+        while (data != null) {
+            if (data.mHash == hash && key.equals(data.mKey)) {
+                V deltaValue = data.mValue;
+                data.mValue = value;
+                return deltaValue;
+            }
+            data = data.next;
+        }
+        return null;
     }
 
     void putWithNullKey(V value) {
+        V checked = checkAllKeyValueData(0, null, value, 0);
+        if (checked == null)
+            return;
 
+        addKeyValueData(0, null, value, 0);
     }
 
     void addKeyValueData(int hash, K key, V value, int index) {

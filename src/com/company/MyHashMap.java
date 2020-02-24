@@ -24,14 +24,17 @@ public class MyHashMap<K, V> {
 
     //    push "key - value" into the table
     void put(K key, V value) {
+        System.out.println(key + " " + value);
         if (key == null) {
             putWithNullKey(value);
             return;
         }
 
         int hash = hash(key.hashCode());
+        System.out.println("Hash: " + hash);
 
         int index = getIndexFor(hash, capacity);
+        System.out.println("Index: " + index);
 
 //        KeyValueData<K, V> data = table[index];
 //        while(data != null) {
@@ -48,6 +51,8 @@ public class MyHashMap<K, V> {
 
 
         addKeyValueData(hash, key, value, index);
+
+
     }
 
     //    check all "key - value" data if they have the same key
@@ -71,13 +76,17 @@ public class MyHashMap<K, V> {
             return;
 
         addKeyValueData(0, null, value, 0);
+
     }
 
     //  create KeyValueData element and put it with right index
     void addKeyValueData(int hash, K key, V value, int index) {
         KeyValueData<K, V> data = table[index];
         table[index] = new KeyValueData<>(hash, key, value, data);
-
+        size++;
+        if ((float) size / (float) capacity >= 0.8) {
+            resize(capacity * 2);
+        }
     }
 
     // returns the value for given key
@@ -95,6 +104,39 @@ public class MyHashMap<K, V> {
         }
 
         return null;
+    }
+
+    void resize(int newCapacity) {
+        KeyValueData[] table2 = new KeyValueData[newCapacity];
+        capacity = newCapacity;
+        transferData(table2);
+
+    }
+
+    private void transferData(KeyValueData[] newTable) {
+        KeyValueData[] copiedLastTable = this.table.clone();
+        this.table = newTable;
+        size = 0;
+        for (int i = 0; i < copiedLastTable.length; i++) {
+            KeyValueData data = copiedLastTable[i];
+            while (data != null) {
+                put((K) data.mKey, (V) data.mValue);
+                data = data.next;
+            }
+        }
+    }
+
+    public void printAll() {
+        for (int i = 0; i < table.length; i++) {
+            KeyValueData data = table[i];
+            System.out.print("Box " + i + ": ");
+            while (data != null) {
+                System.out.print("<" + data.mKey + " - " + data.mValue + "> ");
+                data = data.next;
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
 

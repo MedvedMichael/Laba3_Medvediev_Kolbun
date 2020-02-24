@@ -4,9 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
         MyHashMap<String, String> testHashMap = new MyHashMap<>();
-        testHashMap.put("0","zero");
-        testHashMap.put("1","one");
+        for(int i=0;i<100;i++){
+            testHashMap.put(Integer.toString(i),Integer.toString(i));
+            testHashMap.printAll();
+        }
 
-        System.out.print("Test: " + testHashMap.get("1"));
     }
 }

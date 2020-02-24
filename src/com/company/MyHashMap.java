@@ -2,7 +2,7 @@ package com.company;
 
 
 public class MyHashMap<K, V> {
-    KeyValueData<K, V>[] table; // KeyValueData - data like "key - value"
+    KeyValueData[] table; // KeyValueData - data like "key - value"
     int capacity = 16;
     int size = 0;
     float loadFactor = 0.8f;
@@ -35,15 +35,6 @@ public class MyHashMap<K, V> {
 
         int index = getIndexFor(hash, capacity);
         System.out.println("Index: " + index);
-
-//        KeyValueData<K, V> data = table[index];
-//        while(data != null) {
-//            if (data.mHash == hash && key.equals(data.mKey)) {
-//                data.mValue = value;
-//                return;
-//            }
-//            data = data.next;
-//        }
 
         V checked = checkAllKeyValueData(hash, key, value, index);
         if (checked != null)
@@ -84,7 +75,7 @@ public class MyHashMap<K, V> {
         KeyValueData<K, V> data = table[index];
         table[index] = new KeyValueData<>(hash, key, value, data);
         size++;
-        if ((float) size / (float) capacity >= 0.8) {
+        if ((float) size / (float) capacity >= loadFactor) {
             resize(capacity * 2);
         }
     }
@@ -106,6 +97,17 @@ public class MyHashMap<K, V> {
         return null;
     }
 
+//    void remove(K key) {
+//        int hash = hash(key.hashCode());
+//
+//        int index = getIndexFor(hash, capacity);
+//
+//        KeyValueData<K, V> data = table[index];
+//        if (data.next != null) {
+//
+//        }
+//    }
+
     void resize(int newCapacity) {
         KeyValueData[] table2 = new KeyValueData[newCapacity];
         capacity = newCapacity;
@@ -113,14 +115,14 @@ public class MyHashMap<K, V> {
 
     }
 
-    private void transferData(KeyValueData[] newTable) {
+    private void transferData(KeyValueData<K, V>[] newTable) {
         KeyValueData[] copiedLastTable = this.table.clone();
         this.table = newTable;
         size = 0;
         for (int i = 0; i < copiedLastTable.length; i++) {
-            KeyValueData data = copiedLastTable[i];
+            KeyValueData<K, V> data = copiedLastTable[i];
             while (data != null) {
-                put((K) data.mKey, (V) data.mValue);
+                put(data.mKey, data.mValue);
                 data = data.next;
             }
         }
@@ -128,7 +130,7 @@ public class MyHashMap<K, V> {
 
     public void printAll() {
         for (int i = 0; i < table.length; i++) {
-            KeyValueData data = table[i];
+            KeyValueData<K, V> data = table[i];
             System.out.print("Box " + i + ": ");
             while (data != null) {
                 System.out.print("<" + data.mKey + " - " + data.mValue + "> ");
@@ -140,7 +142,7 @@ public class MyHashMap<K, V> {
     }
 
 
-    class KeyValueData<K, V> {
+    static class KeyValueData<K, V> {
         K mKey;
         V mValue;
         int mHash;

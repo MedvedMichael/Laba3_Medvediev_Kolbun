@@ -24,17 +24,17 @@ public class MyHashMap<K, V> {
 
     //    push "key - value" into the table
     void put(K key, V value) {
-        System.out.println(key + " " + value);
+//        System.out.println(key + " " + value);
         if (key == null) {
             putWithNullKey(value);
             return;
         }
 
         int hash = hash(key.hashCode());
-        System.out.println("Hash: " + hash);
+//        System.out.println("Hash: " + hash);
 
         int index = getIndexFor(hash, capacity);
-        System.out.println("Index: " + index);
+//        System.out.println("Index: " + index);
 
         V checked = checkAllKeyValueData(hash, key, value, index);
         if (checked != null)

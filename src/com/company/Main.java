@@ -17,9 +17,9 @@ public class Main {
                 return;
             }
 
-            for (String word : words) {
-                System.out.println(word);
-            }
+//            for (String word : words) {
+//                System.out.println(word);
+//            }
             printDefinitions(words, dictionary);
         }
 

@@ -19,7 +19,7 @@ public class MyHashMap<K, V> {
 
     //    get index to put from hash and current length
     static int getIndexFor(int hash, int length) {
-        return hash & (length - 1);
+        return hash & (length-1);
     }
 
     //    push "key - value" into the table

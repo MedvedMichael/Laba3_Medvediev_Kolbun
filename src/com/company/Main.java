@@ -3,38 +3,31 @@ package com.company;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println("Please wait until the dictionary loads... :)");
         MyHashMap<String, String>  dictionary = getDictionary();
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            //dictionary = new MyHashMap<>();
             String[] words = getWords(scanner);
             if(words.length==0){
                 scanner.close();
                 return;
             }
 
-//            for (String word : words) {
-//                System.out.println(word);}
+            for (String word : words) {
+                System.out.println(word);
+            }
             printDefinitions(words, dictionary);
         }
 
     }
 
-    public static void prettyOutput(String text) {
-        String ANSI_RESET = "\u001B[0m";
-        String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-        String ANSI_BLACK_TEXT = "\u001B[30m";
-        String ANSI_RED = "\u001B[31m";
-        System.out.print(ANSI_RED + text + ": " + ANSI_RESET);
-    }
     public static void printDefinitions (String[] words, MyHashMap<String, String>  dictionary) throws FileNotFoundException {
         for (String word : words) {
-            prettyOutput(word);
+            System.out.print(word + "   ");
             System.out.println(dictionary.get(word.toUpperCase()));
         }
     }
@@ -50,18 +43,21 @@ public class Main {
             String defWord = line.substring(i+1);
             dictionary.put(keyWord, defWord);
         }
+        //dictionary.printAll();
         return dictionary;
     }
 
     private static String[] getWords(Scanner scanner) {
-        System.out.print("\nEnter the sentence: ");
+        System.out.print("Enter the sentence: ");
 
         String[] words = new String[0];
         if (scanner.hasNextLine()){
-        String sentence = scanner.nextLine().replaceAll("\\W", " ").replaceAll("\\s+", " ").toLowerCase();
+        String sentence = scanner.nextLine().replaceAll(",", "").replaceAll("\\s+", " ");
         words = sentence.split(" ");}
+
+//        scanner.close();
+        //System.out.println(sentence);
         return words;
     }
-
 
 }

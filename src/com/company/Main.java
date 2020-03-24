@@ -7,57 +7,57 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
-        MyHashMap<String, String>  dictionary = getDictionary();
+        MyHashMap<String, String> dictionary = getDictionary();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             //dictionary = new MyHashMap<>();
             String[] words = getWords(scanner);
-            if(words.length==0){
+            if (words.length == 0) {
                 scanner.close();
                 return;
-            }
-
-            for (String word : words) {
-                System.out.println(word);
             }
             printDefinitions(words, dictionary);
         }
 
     }
 
-    public static void printDefinitions (String[] words, MyHashMap<String, String>  dictionary) throws FileNotFoundException {
+    public static void prettyOutput(String text) {
+        String ANSI_RESET = "\u001B[0m";
+        String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+        String ANSI_BLACK_TEXT = "\u001B[30m";
+        String ANSI_RED = "\u001B[31m";
+        System.out.print(ANSI_RED + text + ": " + ANSI_RESET);
+    }
+
+    public static void printDefinitions(String[] words, MyHashMap<String, String> dictionary) throws FileNotFoundException {
         for (String word : words) {
-            System.out.print(word + "   ");
+            prettyOutput(word);
             System.out.println(dictionary.get(word.toUpperCase()));
         }
     }
 
-    private static MyHashMap<String, String> getDictionary () throws FileNotFoundException {
+    private static MyHashMap<String, String> getDictionary() throws FileNotFoundException {
         MyHashMap<String, String> dictionary = new MyHashMap<>();
         File file = new File("dict_processed.txt");
         Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             int i = line.indexOf(';');
             String keyWord = line.substring(0, i);
-            String defWord = line.substring(i+1);
+            String defWord = line.substring(i + 1);
             dictionary.put(keyWord, defWord);
         }
-        //dictionary.printAll();
         return dictionary;
     }
 
     private static String[] getWords(Scanner scanner) {
-        System.out.print("Enter the sentence: ");
+        System.out.print("\nEnter the sentence: ");
 
         String[] words = new String[0];
-        if (scanner.hasNextLine()){
-        String sentence = scanner.nextLine().replaceAll(",", "").replaceAll("\\s+", " ");
-        words = sentence.split(" ");}
-
-//        scanner.close();
-        //System.out.println(sentence);
+        if (scanner.hasNextLine()) {
+            String sentence = scanner.nextLine().replaceAll("\\W", " ").replaceAll("\\s+", " ").toLowerCase();
+            words = sentence.split(" ");
+        }
         return words;
     }
-
 }
